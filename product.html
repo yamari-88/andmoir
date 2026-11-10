@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MOIR — Fitting room</title>
+  <meta name="description" content="MOIR 2027 fitting room.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Sans:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-product" data-page="product">
+  <div class="shell">
+    <img class="shade" id="shade" alt="" aria-hidden="true">
+
+    <header class="top"><a class="back" href="collection.html" data-back>← Back</a></header>
+    <div class="title-row">
+      <h1 class="title" aria-label="Fitting room">FITT<span class="sil"><img src="assets/sil-fitting.png" alt=""></span>NG ROOM</h1>
+      <a class="logo" href="index.html" aria-label="MOIR 2027, home">
+          <span class="logo__word">MOIR</span>
+          <span class="logo__year"><i>2</i><i>0</i><i>2</i><i>7</i></span>
+        </a>
+    </div>
+
+    <h2 class="p-name">
+      <span class="p-name__t" id="pName">Black dress</span>
+      <span class="p-name__s"><i>/</i><span id="pPrice">420 €</span></span>
+    </h2>
+
+    <main class="p-grid">
+      <figure class="p-visual">
+        <div class="scene" id="scene" role="img"></div>
+      </figure>
+
+      <div class="p-buy">
+        <p class="p-lead">Let's choose the only one for you</p>
+        <div class="sizes" id="sizes" role="group" aria-label="Size"></div>
+        <button class="btn btn-buy" id="buy" type="button">BUY</button>
+        <p class="p-bagline" id="bagLine" hidden>In your bag → <a href="bag.html">BAG (<span data-bag-count>0</span>)</a></p>
+
+        <div class="p-text" id="pText"></div>
+
+        <button class="p-deliv" id="delivBtn" type="button">What about <b>DELIVERY</b>?</button>
+        <p class="p-deliv-text" id="delivText" hidden></p>
+      </div>
+    </main>
+    <p class="concept">Concept project</p>
+  </div>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

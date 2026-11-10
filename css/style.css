@@ -1,0 +1,303 @@
+/* =========================================================
+   MOIR 2027 — concept site
+   Всё настраиваемое лежит в :root. Остальное трогать не нужно.
+   ========================================================= */
+:root {
+  /* ЦВЕТА */
+  --bg: #cfd8d8;
+  --ink: #0a0a0a;
+  --wine: #600000;
+  --white: #fff;
+
+  /* ШРИФТЫ */
+  --f-logo: "Montserrat", system-ui, sans-serif;                              /* логотип, MOIR на главной и контактах */
+  --f-main: "Momo Trust Sans", "Hanken Grotesk", system-ui, sans-serif;       /* меню, заголовки, тексты, названия, remove, сумка */
+  --f-ui: "Mona Sans", system-ui, sans-serif;                                 /* LOOK, BUY, CHECKOUT, размеры */
+
+  /* ПРОЗРАЧНОСТИ */
+  --crowd-opacity: 0.55;     /* толпа на главной */
+  --shade-opacity: 0.16;     /* большая тень за товаром */
+  --ghost-opacity: 0.2;      /* призрак за курсором */
+  --look-opacity: 0.6;       /* скотч под LOOK */
+  --btn-tape-opacity: 0.05;  /* скотч поверх кнопок */
+
+  --pad: clamp(20px, 5.5vw, 80px);
+  --fs: clamp(14px, 1.5vw, 22px);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-main);
+  font-weight: 300;
+  font-size: var(--fs);
+  line-height: 1.35;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; }
+.stage :focus-visible { outline-color: var(--white); }
+
+/* ---------- общие детали ---------- */
+.shell { position: relative; padding: 0 var(--pad) 8vw; min-height: 100vh; overflow-x: clip; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; padding-top: clamp(40px, 5.6vw, 82px); position: relative; z-index: 3; }
+.back { font-size: clamp(14px, 1.7vw, 24px); letter-spacing: 0.14em; font-weight: 300; }
+.back:hover { color: var(--wine); }
+
+.logo { display: inline-flex; flex-direction: column; font-family: var(--f-logo); font-weight: 400; line-height: 1; }
+.logo__word { font-size: clamp(30px, 4.2vw, 62px); text-decoration: underline; text-decoration-thickness: 0.04em; text-underline-offset: 0.08em; text-decoration-skip-ink: none; }
+.logo__year { display: flex; justify-content: space-between; font-size: clamp(14px, 1.9vw, 28px); margin-top: 0.25em; text-decoration: underline; text-underline-offset: 0.12em; }
+.logo__year i { font-style: normal; }
+
+.title {
+  font-family: var(--f-main);
+  font-weight: 200;
+  font-size: clamp(34px, 7.6vw, 112px);
+  letter-spacing: 0.3em;
+  line-height: 1;
+  white-space: nowrap;
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+}
+.sil { display: inline-block; line-height: 0; margin: 0 0.04em 0 -0.1em; vertical-align: baseline; }
+.sil img { height: 1.12em; width: auto; max-width: none; }
+
+.concept { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.55; text-align: center; padding: 3vw 0 2vw; }
+.stage > .concept { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 0 14px; color: var(--white); z-index: 6; pointer-events: none; }
+
+/* призрак за курсором */
+.ghost { position: fixed; left: 0; top: 0; width: clamp(90px, 11vw, 170px); height: auto; opacity: 0; pointer-events: none; z-index: 50; transition: opacity 0.6s; filter: blur(1.2px); will-change: transform; }
+.ghost.on { opacity: var(--ghost-opacity); }
+
+/* ---------- КНОПКИ: заливка #600000, скотч 5% сверху, белая обводка 1px внутри ---------- */
+.btn {
+  position: relative; isolation: isolate;
+  display: block; width: 100%; text-align: center; color: var(--white);
+  font-family: var(--f-ui); font-weight: 800; font-stretch: 125%;
+  font-size: clamp(20px, 3vw, 44px); letter-spacing: 0.32em; padding-left: 0.32em;
+  padding-top: clamp(18px, 3.4vw, 48px); padding-bottom: clamp(18px, 3.4vw, 48px);
+  background: var(--wine);
+  box-shadow: inset 0 0 0 1px var(--white);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: url("../assets/tape.png") center / 100% 100% no-repeat;
+  opacity: var(--btn-tape-opacity);
+}
+.btn:hover { background: #7a0000; }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; background: var(--wine); }
+
+/* ---------- ГЛАВНАЯ и КОНТАКТЫ ----------
+   .frame — это макет 1440×1024, он масштабируется целиком (всё внутри в процентах и cqw). */
+.stage { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; }
+.frame {
+  position: relative; margin: 0 auto; aspect-ratio: 1440 / 1024;
+  width: min(100vw, calc(100svh * 1.40625));
+  container-type: inline-size;
+}
+.frame > img, .frame > div, .frame > p, .frame > a, .frame > h1, .frame > nav { position: absolute; }
+
+.crowd { left: 50%; top: 0; width: max(100%, 100vw); height: 63%; transform: translateX(-50%); object-fit: cover; object-position: center top; opacity: var(--crowd-opacity); mix-blend-mode: multiply; }
+.model { height: auto; }
+.m-left   { left: -2.5%; top: 21.5%; width: 34.8%; }
+.m-center { left: 26.7%; top: 14%;   width: 46.7%; }
+.m-right  { left: 66.3%; top: 21%;   width: 31.1%; }
+
+.nav { z-index: 6; left: 5.55%; right: 5.55%; top: 11%; display: flex; justify-content: space-between; font-family: var(--f-main); font-weight: 300; font-size: clamp(14px, 2.2vw, 34px); font-size: 2.3cqw; letter-spacing: 0.01em; }
+.nav a { transition: opacity 0.2s; }
+.nav a:hover { opacity: 0.55; }
+.nav__l, .nav__r { display: flex; gap: 3.9cqw; }
+.nav .is-current { text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 0.05em; }
+
+.hero-title {
+  z-index: 4; left: 0; width: 100%; top: 32%;
+  text-align: center; padding-left: 0.06em; color: var(--white);
+  font-family: var(--f-logo); font-weight: 200; font-size: 18.75cqw; line-height: 0.9; letter-spacing: 0.06em;
+  text-decoration: underline; text-decoration-thickness: 0.018em; text-underline-offset: 0.04em; text-decoration-skip-ink: none;
+  pointer-events: none;
+}
+
+/* бордовая надпись на белой кляксе (обе — картинки) */
+.scribble { z-index: 5; left: var(--x); top: var(--y); width: var(--w); aspect-ratio: var(--ar); display: flex; align-items: center; justify-content: center; pointer-events: none; background: url("../assets/blob.png") center / 100% 100% no-repeat; }
+.scribble img { width: 82%; height: auto; }
+.hero-tag { --x: 24.3%; --y: 55.5%; --w: 51.5%; --ar: 8.4; }
+
+/* контакты */
+.c-frame { left: 10.4%; top: 2%; width: 80.1%; height: auto; }
+.c-model { left: 27.8%; top: 8.1%; width: 44.4%; height: auto; }
+.frame > .mirror-hit { z-index: 2; left: 23%; top: 17%; width: 54%; height: 78%; border-radius: 50% / 46%; overflow: hidden; cursor: crosshair; }
+.c-title { top: 6.5%; pointer-events: auto; }
+.c-line { z-index: 4; left: 50%; top: 31%; transform: translateX(-50%); color: var(--white); font-family: var(--f-logo); font-weight: 200; white-space: nowrap; font-size: 8.75cqw; letter-spacing: 0.1em; line-height: 1; pointer-events: none; }
+.c-tag { --x: 32.3%; --y: 45.4%; --w: 34%; --ar: 7; }
+.c-btn { z-index: 5; left: 28.3%; width: 43.4%; top: 58.6%; font-size: 3cqw; padding-top: 0; padding-bottom: 0; height: 11.2%; display: flex; align-items: center; justify-content: center; }
+.c-foot { z-index: 5; left: 28.3%; width: 43.4%; top: 91.5%; display: flex; justify-content: space-between; color: var(--white); font-weight: 300; font-size: clamp(11px, 1.45vw, 21px); font-size: 1.45cqw; letter-spacing: 0.03em; }
+
+/* ---------- БИРКИ (коллекция и сумка) ---------- */
+.tag { position: relative; display: block; flex: 0 0 auto; }
+.tag__hang { position: relative; width: calc(var(--w) * 100vw / 1440); max-width: calc(var(--w) * 1.3px); transform-origin: 50% 0; animation: sway 7s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.tag__hang > img { width: 100%; height: auto; }
+.tag:hover .tag__hang, .tag:focus-visible .tag__hang { animation: swing 1.2s ease-out 1; }
+@keyframes sway { 0%, 100% { transform: rotate(-0.8deg); } 50% { transform: rotate(0.8deg); } }
+@keyframes swing { 0% { transform: rotate(0); } 20% { transform: rotate(5deg); } 45% { transform: rotate(-3.5deg); } 70% { transform: rotate(2deg); } 100% { transform: rotate(0); } }
+
+.tape { position: absolute; aspect-ratio: 422 / 115; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.tape::before { content: ""; position: absolute; inset: 0; background: url("../assets/tape.png") center / 100% 100% no-repeat; opacity: var(--look-opacity); }
+.tape b { position: relative; color: var(--white); font-family: var(--f-ui); font-weight: 800; font-stretch: 125%; font-size: clamp(16px, 2.4vw, 34px); letter-spacing: 0.3em; padding-left: 0.3em; }
+
+.tag__cap { margin-top: clamp(14px, 2.4vw, 34px); }
+.tag__cap .row { display: flex; align-items: baseline; gap: 0.9em; white-space: nowrap; }
+.tag__cap h3, .bag-cap h3 { font-weight: 500; color: var(--wine); font-size: clamp(16px, 1.75vw, 25px); letter-spacing: 0.14em; }
+.tag__cap .slash { color: var(--wine); }
+.tag__cap .price { font-weight: 300; font-size: clamp(16px, 1.75vw, 25px); letter-spacing: 0.3em; }
+.tag__cap p { margin-top: 0.7em; font-size: var(--fs); max-width: calc(var(--w) * 100vw / 1440 + 30px); }
+
+/* ---------- КОЛЛЕКЦИЯ ---------- */
+.title-row { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-top: clamp(20px, 2.6vw, 38px); }
+.title-row .logo { flex: 0 0 auto; }
+.page-product .title { font-size: clamp(30px, 7vw, 104px); letter-spacing: 0.24em; }
+.shell--hang .title-row { position: absolute; left: var(--pad); right: var(--pad); top: clamp(100px, 8.4vw, 124px); margin-top: 0; }
+.tags { display: flex; gap: 7.5vw; align-items: flex-start; }
+
+/* ---------- ТОВАР ---------- */
+.page-product .shell > * { position: relative; z-index: 1; }
+.page-product .shell > .shade { position: absolute; z-index: 0; }
+.shade { right: -10%; top: 12%; width: 58%; height: auto; opacity: var(--shade-opacity); filter: grayscale(1) blur(2px); mix-blend-mode: multiply; transform: scaleX(-1); pointer-events: none; }
+.p-name { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 0.5em; margin-top: clamp(10px, 2.4vw, 36px); }
+.p-name__t { font-weight: 500; color: var(--wine); font-size: clamp(38px, 9.7vw, 140px); letter-spacing: 0.12em; line-height: 1.05; }
+.p-name__s { font-weight: 300; font-size: clamp(24px, 3.9vw, 56px); letter-spacing: 0.3em; white-space: nowrap; }
+.p-name__s i { font-style: normal; color: var(--wine); margin-right: 0.5em; letter-spacing: 0; }
+.p-grid { display: grid; grid-template-columns: minmax(0, 0.98fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); align-items: start; margin-top: clamp(-10px, 1vw, 20px); }
+.p-visual { position: relative; margin-left: calc(var(--pad) * -1); }
+
+/* сцена товара: слои в процентах от 740×900 */
+.scene { position: relative; width: 100%; aspect-ratio: 740 / 900; }
+.scene > img, .scene > .mirror, .scene > .torn { position: absolute; }
+.scene img { height: auto; max-width: none; pointer-events: none; }
+.torn { inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.mirror > .mirror__img { width: 100%; }
+.mirror__refl { position: absolute; mix-blend-mode: multiply; opacity: 0.6; }
+.mirror__refl.is-ghost { filter: grayscale(1) contrast(0.85) brightness(1.1); opacity: 0.35; }
+.mirror-hit { position: absolute; left: 12%; top: 5%; width: 76%; height: 90%; border-radius: 50% / 46%; overflow: hidden; cursor: crosshair; }
+.cracks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.cracks path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.cracks .c-hi { stroke: rgba(255, 255, 255, 0.95); stroke-width: 1.3; }
+.cracks .c-lo { stroke: rgba(0, 0, 0, 0.45); stroke-width: 0.8; transform: translate(1px, 1px); }
+
+.p-buy { padding-top: clamp(24px, 5vw, 76px); }
+.p-lead { text-align: center; font-size: clamp(14px, 1.5vw, 22px); letter-spacing: 0.22em; margin-bottom: clamp(16px, 2.2vw, 34px); }
+.sizes { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 2.2vw, 32px); margin-bottom: clamp(16px, 2.2vw, 34px); }
+.size { aspect-ratio: 1; border: 3px solid var(--white); color: var(--wine); font-family: var(--f-ui); font-weight: 300; font-size: clamp(18px, 2.5vw, 36px); transition: background 0.15s, color 0.15s; }
+.size:hover { background: rgba(255, 255, 255, 0.35); }
+.size[aria-pressed="true"] { background: var(--wine); color: var(--white); }
+.btn-buy.is-done { background: #7a0000; }
+.p-bagline { margin-top: 0.9em; text-align: center; font-size: 0.9em; letter-spacing: 0.1em; }
+.p-bagline a { text-decoration: underline; text-underline-offset: 0.2em; }
+.p-text { margin-top: clamp(22px, 3vw, 44px); white-space: pre-line; line-height: 1.32; }
+.p-deliv { display: block; margin: clamp(22px, 3vw, 44px) 0 0 auto; }
+.p-deliv b { font-weight: 700; }
+.p-deliv:hover { color: var(--wine); }
+.p-deliv-text { margin-top: 0.8em; text-align: right; max-width: 26em; margin-left: auto; font-size: 0.9em; }
+
+/* ---------- СУМКА ---------- */
+.bag { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); gap: clamp(20px, 4vw, 70px); }
+.bag-left { position: relative; min-height: 38vw; }
+.bag-left .top { position: absolute; left: 0; top: 0; padding-top: clamp(40px, 5.6vw, 82px); }
+.bag-left .title { position: absolute; z-index: 3; left: 0; top: clamp(100px, 8.4vw, 124px); }
+.title .count { letter-spacing: 0.18em; }
+.bag-tags { --k: 0.88; display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 60px); align-items: flex-start; }
+.bag-tags.is-3 { --k: 0.62; gap: clamp(14px, 2.6vw, 36px); margin-top: clamp(40px, 6.3vw, 90px); }
+.bag-tags.is-many { --k: 0.46; gap: clamp(10px, 2vw, 28px); margin-top: clamp(70px, 10.4vw, 150px); }
+.bag-item { flex: 0 0 auto; }
+.bag-item .tag__hang { width: calc(var(--w) * var(--k) * 100vw / 1440); max-width: calc(var(--w) * var(--k) * 1.25px); }
+.bag-cap { margin-top: clamp(14px, 2.2vw, 30px); }
+.bag-cap button { display: block; margin-top: 0.7em; text-decoration: underline; text-underline-offset: 0.2em; font-size: 0.9em; }
+.bag-cap button:hover { color: var(--wine); }
+.bag-item.fall .tag__hang { animation: fall 1s cubic-bezier(0.5, 0, 0.9, 0.6) forwards; }
+@keyframes fall {
+  0% { transform: rotate(0); opacity: 1; }
+  16% { transform: rotate(-7deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(26deg); opacity: 0; }
+}
+.bag-item.fall .bag-cap { opacity: 0; transition: opacity 0.3s; }
+.bag-empty { padding: clamp(180px, 20vw, 290px) 0 0; font-size: var(--fs); letter-spacing: 0.08em; }
+
+.bag-sum { padding-top: clamp(200px, 20vw, 290px); }
+.sum-lead { font-size: 0.85em; margin-bottom: 0.5em; }
+.sum-rows { list-style: none; border-bottom: 2px solid var(--ink); padding-bottom: clamp(18px, 2.4vw, 34px); }
+.sum-rows li { display: flex; justify-content: space-between; gap: 1em; font-weight: 300; font-size: clamp(18px, 2.4vw, 34px); padding: 0.3em 0; }
+.sum-total { display: flex; justify-content: space-between; align-items: flex-end; gap: 1em; margin: clamp(20px, 2.6vw, 40px) 0; font-weight: 300; }
+.sum-total__l { font-size: clamp(30px, 3.9vw, 56px); line-height: 1; }
+.sum-total__l small { display: block; margin-top: 0.7em; font-size: clamp(11px, 1.05vw, 15px); line-height: 1.2; }
+.sum-total__r { font-size: clamp(30px, 3.9vw, 56px); line-height: 1; white-space: nowrap; }
+.btn--sm { font-size: clamp(18px, 2.5vw, 36px); padding-top: clamp(14px, 2.2vw, 30px); padding-bottom: clamp(14px, 2.2vw, 30px); }
+.keep { display: inline-block; margin-top: 0.7em; font-size: 0.85em; }
+.keep:hover { color: var(--wine); }
+.check-note { margin-top: 1em; font-size: 0.85em; color: var(--wine); }
+
+/* =========================================================
+   МОБИЛЬНАЯ ВЕРСИЯ (до 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  :root { --pad: 20px; --fs: 15px; }
+
+  /* главная и контакты: рамка = весь экран */
+  .frame { width: 100%; aspect-ratio: auto; height: 100svh; min-height: 560px; }
+  .nav { top: 3.5%; left: 5%; right: 5%; font-size: 3.7cqw; }
+  .nav__l, .nav__r { gap: 3.6cqw; }
+  .crowd { height: 50%; }
+  .m-left   { left: -20%; top: 50%; width: 62%; }
+  .m-center { left: 8%;    top: 11%; width: 84%; }
+  .m-right  { left: 58%;   top: 50%; width: 62%; }
+  .hero-title { top: 33%; font-size: 25cqw; }
+  .hero-tag { --x: 8%; --y: 63%; --w: 84%; --ar: 8; }
+
+  .c-frame { left: 50%; top: 12%; height: 88%; width: auto; max-width: none; transform: translateX(-50%); }
+  .c-model { left: 7%; top: 19%; width: 86%; }
+  .frame > .mirror-hit { left: 22%; top: 24%; width: 56%; height: 66%; }
+  .c-title { top: 4%; font-size: 25cqw; }
+  .c-line { top: 24%; font-size: 8.4cqw; }
+  .c-tag { --x: 12%; --y: 55%; --w: 76%; --ar: 7; }
+  .c-btn { left: 9%; width: 82%; top: 70%; height: 9%; font-size: 6.4cqw; }
+  .c-foot { left: 9%; width: 82%; top: 90%; font-size: 3.1cqw; }
+
+  /* внутренние страницы */
+  .shell { padding-bottom: 60px; }
+  .title { letter-spacing: 0.16em; font-size: clamp(24px, 8vw, 52px); }
+  .title-row { flex-direction: column-reverse; align-items: flex-start; gap: 14px; margin-top: 18px; }
+  .title-row .logo { align-self: flex-end; }
+  .shell--hang .title-row { position: relative; left: auto; right: auto; top: auto; margin-top: 40px; }
+  .tags { overflow-x: auto; scroll-snap-type: x mandatory; gap: 18px; margin: 18px calc(var(--pad) * -1) 0; padding: 0 var(--pad) 12px; -webkit-overflow-scrolling: touch; }
+  .tags .tag { flex: 0 0 66%; scroll-snap-align: center; }
+  .tag__hang, .bag-item .tag__hang { width: 100%; max-width: none; }
+  .tag__cap { max-width: none; }
+
+  .p-name { flex-direction: column; }
+  .p-grid { grid-template-columns: 1fr; }
+  .p-visual { margin: 0 calc(var(--pad) * -1); }
+  .p-buy { padding-top: 6px; }
+  .shade { width: 90%; right: -20%; top: 28%; }
+
+  .bag { grid-template-columns: 1fr; }
+  .bag-left { min-height: 0; }
+  .bag-left .top, .bag-left .title { position: relative; top: auto; left: auto; }
+  .bag-left .top { padding-top: 40px; }
+  .bag-left .title { margin: 18px 0 8px; }
+  .bag-tags, .bag-tags.is-3, .bag-tags.is-many { flex-wrap: wrap; gap: 16px; margin-top: 0; }
+  .bag-item { width: calc(50% - 8px); }
+  .bag-sum, .bag-empty { padding-top: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag__hang { animation: none !important; }
+  .bag-item.fall .tag__hang { animation: none !important; opacity: 0; }
+  .ghost { display: none; }
+}
+@media (hover: none) { .ghost { display: none; } }

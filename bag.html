@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MOIR — Bag</title>
+  <meta name="description" content="Your MOIR bag.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Sans:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-bag" data-page="bag">
+  <div class="shell">
+    <a class="logo" href="index.html" aria-label="MOIR 2027, home" style="position:absolute;right:var(--pad);top:clamp(40px,5.6vw,82px);z-index:4">
+        <span class="logo__word">MOIR</span>
+        <span class="logo__year"><i>2</i><i>0</i><i>2</i><i>7</i></span>
+      </a>
+
+    <div class="bag">
+      <section class="bag-left">
+        <header class="top"><a class="back" href="collection.html" data-back>← Back</a></header>
+        <h1 class="title" aria-label="Bag">B<span class="sil"><img src="assets/sil-bag.png" alt=""></span>G <span class="count">( <span id="bagN">0</span> )</span></h1>
+        <div class="bag-tags" id="bagTags"></div>
+      </section>
+
+      <aside class="bag-sum">
+        <p class="sum-lead" id="sumLead">Nothing hanging.</p>
+        <ul class="sum-rows" id="sumRows"></ul>
+        <div class="sum-total">
+          <div class="sum-total__l">TOTAL<small>Delivery calculated at checkout</small></div>
+          <div class="sum-total__r" id="sumTotal">0 €</div>
+        </div>
+        <button class="btn btn--sm" id="checkout" type="button">CHECKOUT</button>
+        <p class="check-note" id="checkNote" hidden>Concept project — checkout is not connected.</p>
+        <a class="keep" href="collection.html">← Keep looking</a>
+      </aside>
+    </div>
+    <p class="concept">Concept project</p>
+  </div>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
